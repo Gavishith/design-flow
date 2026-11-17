@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DesignFlow — Interactive Design Review System for Client Approval. Review design options, compare materials, leave feedback, and approve or reject designs.">
+  <title>DesignFlow | Interactive Design Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,620&family=Outfit:wght@360;460;560;650&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" data-page="overview">
+        <span class="brand-mark" aria-hidden="true">D</span>
+        <span class="brand-copy">design<span>flow</span><small>Client review studio</small></span>
+      </a>
+      <p class="nav-label">Workspace</p>
+      <nav class="nav" aria-label="Main">
+        <button class="nav-link active" data-page="overview"><span class="nav-glyph" aria-hidden="true"></span>Overview</button>
+        <button class="nav-link" data-page="rooms"><span class="nav-glyph" aria-hidden="true"></span>Project Rooms</button>
+        <button class="nav-link" data-page="designs"><span class="nav-glyph" aria-hidden="true"></span>Design Options</button>
+        <button class="nav-link" data-page="materials"><span class="nav-glyph" aria-hidden="true"></span>Materials</button>
+        <button class="nav-link" data-page="gallery"><span class="nav-glyph" aria-hidden="true"></span>Gallery</button>
+        <button class="nav-link" data-page="feedback"><span class="nav-glyph" aria-hidden="true"></span>Feedback</button>
+        <button class="nav-link" data-page="approvals"><span class="nav-glyph" aria-hidden="true"></span>Approvals <span class="nav-count" id="pendingCount">0</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <p class="course-tag">CSE326 · HTML · CSS · JavaScript</p>
+        <div class="profile">
+          <span class="avatar">GR</span>
+          <span><strong>Gavishith R</strong><small>Client reviewer</small></span>
+        </div>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Open navigation">Menu</button>
+        <p class="crumb">DesignFlow <span>/</span> <strong id="crumbLabel">Overview</strong></p>
+        <p class="today" id="todayLabel"></p>
+      </header>
+      <main class="pages">
+        <section class="page active" id="page-overview" data-title="Overview">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Interactive design review</p>
+              <h1>Decisions, in one studio.</h1>
+              <p class="lede">Open a project room, compare design options and materials, then record client feedback and a clear approval.</p>
+            </div>
+            <button class="btn btn-primary" data-action="new-room">New project room</button>
+          </div>
+          <div class="stats" id="stats"></div>
+          <div class="split">
+            <section class="panel">
+              <div class="panel-head">
+                <h2>Project rooms</h2>
+                <button class="text-btn" data-page="rooms">View all</button>
+              </div>
+              <div id="overviewRooms" class="stack"></div>
+            </section>
+            <section class="panel">
+              <div class="panel-head">
+                <h2>Latest activity</h2>
+              </div>
+              <div id="overviewActivity" class="stack"></div>
+            </section>
+          </div>
+        </section>
+        <section class="page" id="page-rooms" data-title="Project Rooms">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Separate spaces</p>
+              <h1>Project rooms</h1>
+              <p class="lede">Each room keeps one client project together: designs, materials, comments, and the approval status.</p>
+            </div>
+            <button class="btn btn-primary" data-action="new-room">Create room</button>
+          </div>
+          <div class="toolbar">
+            <input id="roomSearch" type="search" placeholder="Search rooms or clients" aria-label="Search project rooms">
+            <select id="roomFilter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="In review">In review</option>
+              <option value="Approved">Approved</option>
+              <option value="Changes requested">Changes requested</option>
+            </select>
+          </div>
+          <div id="roomGrid" class="card-grid"></div>
+        </section>
+
+                <section class="page" id="page-designs" data-title="Design Options">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Multiple choices</p>
+              <h1>Design options</h1>
+              <p class="lede">Show more than one concept for a room so the client can compare before they approve.</p>
+            </div>
+            <button class="btn btn-primary" data-action="new-design">Add design option</button>
+          </div>
+          <div class="toolbar">
+            <input id="designSearch" type="search" placeholder="Search designs" aria-label="Search design options">
+            <select id="designProject" aria-label="Filter designs by project"></select>
+          </div>
+          <div id="designGrid" class="card-grid"></div>
+        </section>
+        <section class="page" id="page-materials" data-title="Materials">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Compare finishes</p>
+              <h1>Material selection</h1>
+              <p class="lede">Pick a room, explore finishes, and pin two materials to compare durability, tone, and cost.</p>
+            </div>
+          </div>
+          <div class="toolbar">
+            <label class="field">Project room
+              <select id="materialProject"></select>
+            </label>
+            <div class="chips" id="materialCats" role="tablist" aria-label="Material categories"></div>
+          </div>
+          <div id="materialGrid" class="swatch-grid"></div>
+          <section class="panel compare-panel">
+            <div class="panel-head">
+              <h2>Compare</h2>
+              <p id="compareHint">Pin two materials to see them side by side.</p>
+            </div>
+            <div id="compareTable"></div>
+          </section>
+        </section>
+        <section class="page" id="page-gallery" data-title="Gallery">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Previews</p>
+              <h1>Design gallery</h1>
+              <p class="lede">Browse every concept. Open a preview to inspect the palette, leave a note, or record a decision.</p>
+            </div>
+          </div>
+          <div class="chips" id="galleryFilters"></div>
+          <div id="galleryGrid" class="gallery-grid"></div>
+        </section>
+        <section class="page" id="page-feedback" data-title="Feedback">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Client voice</p>
+              <h1>Feedback</h1>
+              <p class="lede">Suggestions stay attached to a project and, when useful, to a specific design option.</p>
+            </div>
+          </div>
+          <div class="split">
+            <form class="panel form" id="feedbackForm">
+              <h2>Share a suggestion</h2>
+              <label class="field">Your name
+                <input name="author" required maxlength="40" placeholder="Client name">
+              </label>
+              <label class="field">Project room
+                <select name="projectId" id="feedbackProject" required></select>
+              </label>
+              <label class="field">Design option
+                <select name="designId" id="feedbackDesign">
+                  <option value="">General note</option>
+                </select>
+              </label>
+              <label class="field">Suggestion
+                <textarea name="message" required maxlength="400" rows="4" placeholder="What should change, and why?"></textarea>
+              </label>
+              <button class="btn btn-primary" type="submit">Save feedback</button>
+            </form>
+            <section class="panel">
+              <div class="panel-head"><h2>Recent notes</h2></div>
+              <div id="feedbackList" class="stack"></div>
+            </section>
+          </div>
+        </section>
+        <section class="page" id="page-approvals" data-title="Approvals">
+          <div class="page-head">
+            <div>
+              <p class="eyebrow">Sign-off</p>
+              <h1>Approval system</h1>
+              <p class="lede">Approve a design, reject it, or ask for changes. The project room status follows the latest decisions.</p>
+            </div>
+          </div>
+          <div class="chips" id="approvalFilters"></div>
+          <div id="approvalList" class="stack"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+    <div class="backdrop" id="backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="panel-head">
+        <h2 id="modalTitle">Create</h2>
+        <button class="text-btn" id="closeModal" type="button">Close</button>
+      </div>
+      <form id="modalForm"></form>
+    </section>
+  </div>
+  <div class="backdrop" id="lightbox" hidden>
+    <section class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="lightTitle">
+      <div class="panel-head">
+        <h2 id="lightTitle">Design</h2>
+        <button class="text-btn" id="closeLight" type="button">Close</button>
+      </div>
+      <div id="lightBody" class="light-body"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
